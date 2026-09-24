@@ -12,11 +12,11 @@ Trigger keyword: `gh`
 | --- | --- |
 | `gh` | Shortcuts, plus your most recently pushed repositories |
 | `gh pyst` | Fuzzy match against cached repository names |
-| `gh danudey/pystrptime` | Open that repository |
-| `gh danudey/pystrptime ` | List every page of that repository |
-| `gh danudey/pystrptime releases` | Open that repository's releases page |
-| `gh danudey/pystrptime rel` | Same — subpages are fuzzy matched too |
-| `gh danudey/pystrptime fork` | Open your fork of that repository |
+| `gh danudey/Wox.Plugin.gh` | Open that repository |
+| `gh danudey/Wox.Plugin.gh ` | List every page of that repository |
+| `gh danudey/Wox.Plugin.gh releases` | Open that repository's releases page |
+| `gh danudey/Wox.Plugin.gh rel` | Same — subpages are fuzzy matched too |
+| `gh danudey/Wox.Plugin.gh fork` | Open your fork of that repository |
 | `gh pulls` | Pull requests that involve you |
 | `gh issues` | Issues that involve you |
 | `gh notifications` | Your notification inbox |

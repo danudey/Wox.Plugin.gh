@@ -123,9 +123,9 @@ Query grammar (trigger keyword ``gh``)::
 
     gh                                  shortcuts + your most recently pushed repositories
     gh pyst                             fuzzy match against cached repository names
-    gh danudey/pystrptime               open that repository
-    gh danudey/pystrptime releases      open that repository's releases page
-    gh danudey/pystrptime fork          open your fork of that repository
+    gh danudey/Wox.Plugin.gh               open that repository
+    gh danudey/Wox.Plugin.gh releases      open that repository's releases page
+    gh danudey/Wox.Plugin.gh fork          open your fork of that repository
     gh pulls                            your pull request inbox
     gh refresh                          rebuild the repository cache now
 
