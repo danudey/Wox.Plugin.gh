@@ -58,6 +58,15 @@
 #     {
 #       "Type": "checkbox",
 #       "Value": {
+#         "Key": "showPreview",
+#         "Label": "i18n:gh_setting_show_preview",
+#         "DefaultValue": "false",
+#         "Tooltip": "i18n:gh_setting_show_preview_tooltip"
+#       }
+#     },
+#     {
+#       "Type": "checkbox",
+#       "Value": {
 #         "Key": "registerRepoCommands",
 #         "Label": "i18n:gh_setting_repo_commands",
 #         "DefaultValue": "false",
@@ -80,6 +89,8 @@
 #       "gh_setting_ttl_tooltip": "How old the cached repository list may get before it is refreshed in the background.",
 #       "gh_setting_include_archived": "Include archived repositories",
 #       "gh_setting_include_archived_tooltip": "Show archived repositories in autocomplete results.",
+#       "gh_setting_show_preview": "Show the repository preview panel",
+#       "gh_setting_show_preview_tooltip": "Show repository details in a side panel. The panel takes 40% of the window, leaving less room for long repository names.",
 #       "gh_setting_repo_commands": "Register repository names for inline Tab completion",
 #       "gh_setting_repo_commands_tooltip": "Also expose cached repository names as query commands. This enables Wox inline Tab completion, but adds one entry per repository to global search."
 #     },
@@ -97,6 +108,8 @@
 #       "gh_setting_ttl_tooltip": "缓存的仓库列表超过该时长后会在后台刷新。",
 #       "gh_setting_include_archived": "包含已归档的仓库",
 #       "gh_setting_include_archived_tooltip": "在自动补全结果中显示已归档的仓库。",
+#       "gh_setting_show_preview": "显示仓库预览面板",
+#       "gh_setting_show_preview_tooltip": "在侧边面板中显示仓库详情。该面板会占用窗口宽度的 40%，留给长仓库名的空间更少。",
 #       "gh_setting_repo_commands": "将仓库名注册为可 Tab 补全的命令",
 #       "gh_setting_repo_commands_tooltip": "把缓存的仓库名同时注册为查询命令，从而启用 Wox 行内 Tab 补全，但会在全局搜索中为每个仓库增加一个条目。"
 #     }
@@ -342,6 +355,7 @@ class GitHubJumpPlugin:
         self._fork_pending: Dict[str, bool] = {}
         self._registered_repo_commands: bool = False
         self._include_archived_cached: bool = False
+        self._show_preview_cached: bool = False
 
     # ------------------------------------------------------------------
     # lifecycle
@@ -402,6 +416,9 @@ class GitHubJumpPlugin:
 
     async def _include_archived(self, ctx: Context) -> bool:
         return (await self._setting(ctx, "includeArchived", "false")).lower() == "true"
+
+    async def _show_preview(self, ctx: Context) -> bool:
+        return (await self._setting(ctx, "showPreview", "false")).lower() == "true"
 
     async def _repo_commands_enabled(self, ctx: Context) -> bool:
         return (await self._setting(ctx, "registerRepoCommands", "false")).lower() == "true"
@@ -688,6 +705,11 @@ class GitHubJumpPlugin:
     # ------------------------------------------------------------------
 
     def _repo_preview(self, repo: Dict[str, Any]) -> WoxPreview:
+        # The preview panel takes roughly half the window, which truncates every
+        # repository name in the list, so it stays off unless asked for. An empty
+        # preview is what results without a preview send, so no panel is drawn.
+        if not self._show_preview_cached:
+            return WoxPreview()
         lines = ["## %s" % repo.get("full_name", "")]
         if repo.get("description"):
             lines.append("")
@@ -817,6 +839,7 @@ class GitHubJumpPlugin:
     async def query(self, ctx: Context, query: Query) -> QueryResponse:
         trigger = query.trigger_keyword or "gh"
         self._include_archived_cached = await self._include_archived(ctx)
+        self._show_preview_cached = await self._show_preview(ctx)
         search = self._full_search(query)
         tokens = search.split()
         trailing_space = query.raw_query.endswith(" ") and bool(tokens)

@@ -77,6 +77,7 @@ refreshed in the background once it is older than the configured TTL.
 | `gh` executable | `gh` | Path to the GitHub CLI. Platform specific, so it is not shared by cloud sync. |
 | Refresh after | `24` h | How stale the cached repository list may get. |
 | Include archived repositories | off | Show archived repositories in autocomplete. |
+| Show the repository preview panel | off | Show repository details (language, stars, default branch, last push) in a side panel. The panel takes 40% of the window, leaving less room for long repository names. |
 | Register repository names for inline Tab completion | off | Also registers up to 500 repository names as query commands. This turns on Wox's inline Tab completion for repository names, but adds one entry per repository to global search. Wox's own **Enable query completion hint** setting must be on for the inline hint to appear. |
 
 ## Install
